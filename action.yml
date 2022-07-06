@@ -92,7 +92,7 @@ runs:
         #STEP 4: Get the JobID and URL using the queue location
         #Sleep to ensure the job gets started. Sometimes Jenkins has a few seconds pause
         sleep 10
-        BUILDJSON=$(curl -s -X GET -u "$userName:$password"   "$QUEUEURL/api/json?pretty=true")
+        BUILDJSON=$(curl -s -X GET --insecure -u "$userName:$password"   "$QUEUEURL/api/json?pretty=true")
 
         if [[ $verbose == true ]]; then
           echo "BUILDJSON:"
