@@ -50,13 +50,7 @@ runs:
 
         #Generate Crumb value
         CRUMB=`curl --insecure -s -u "$userName:$password" $urlOfJenkinsServer'/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)'`
-        TRIGGERJOBJSON=$(curl --insecure -I -s -X POST -u "$userName:$password"  -H "$CRUMB" '"$urlOfJenkinsServer"/job/"$jenkinsJobName"/buildWithParameters?
-        BUILD_LABEL="vicki_test"&BUILD_DIR="/memverge/home/mvm/master"&BUILD_DATE="latest"&TEST_SUITE="all"&TEST_APP="redis:7000"&KX_HOME="/memverge/automation/KX_AEP5/l64"
-        &HOSTS_DAX_MAP="10.0.1.174=/dev/dax0.0,/dev/dax1.0"&MVTEST_BRANCH="master"&TCMS_DRY_RUN=False&TCMS_TRACE=True&Exclude_Host_Reboot=False
-        &BUILD_PACKAGE_NAME="mvmm-v2.5.0-rhel8-x86_64_DEBUG.tgz"&TCMS_UPLOAD=False&Enable_NUMA_CTL_KDB="false"&debugBuild=False&start_mvmallocd_service=False
-        &MM_PYTHON_BIN="/memverge/automation/anaconda3/bin/python"&USER_PW="memverge"&NUMBER_SERVER="1"&DB_PER_SERVER="1"&RECORD_PER_DB="1000000"&
-        BUILD_LOCATION="/nfs/memverge/home/mvm/MemVergeTMS_Archive/latest/mvmm_DEBUG.tgz"&SNAPSHOT_DEPTH="1"&SKIP_NUMA_CTL=True&SNAPSHOT+WIDTH="1"&
-        BUILD_PKG="vicki_test_build"')
+        TRIGGERJOBJSON=$(curl --insecure -I -s -X POST -u "$userName:$password"  -H "$CRUMB" '"$urlOfJenkinsServer"/job/"$jenkinsJobName"/buildWithParameters?BUILD_LABEL="vicki_test"&BUILD_DIR="/memverge/home/mvm/master"&BUILD_DATE="latest"&TEST_SUITE="all"&TEST_APP="redis:7000"&KX_HOME="/memverge/automation/KX_AEP5/l64"&HOSTS_DAX_MAP="10.0.1.174=/dev/dax0.0,/dev/dax1.0"&MVTEST_BRANCH="master"&TCMS_DRY_RUN=False&TCMS_TRACE=True&Exclude_Host_Reboot=False&BUILD_PACKAGE_NAME="mvmm-v2.5.0-rhel8-x86_64_DEBUG.tgz"&TCMS_UPLOAD=False&Enable_NUMA_CTL_KDB="false"&debugBuild=False&start_mvmallocd_service=False&MM_PYTHON_BIN="/memverge/automation/anaconda3/bin/python"&USER_PW="memverge"&NUMBER_SERVER="1"&DB_PER_SERVER="1"&RECORD_PER_DB="1000000"&BUILD_LOCATION="/nfs/memverge/home/mvm/MemVergeTMS_Archive/latest/mvmm_DEBUG.tgz"&SNAPSHOT_DEPTH="1"&SKIP_NUMA_CTL=True&SNAPSHOT+WIDTH="1"&BUILD_PKG="vicki_test_build"')
         
         if [[ $verbose == true ]]; then
           echo "Results of Triggering The Job:"
@@ -98,7 +92,7 @@ runs:
         #STEP 4: Get the JobID and URL using the queue location
         #Sleep to ensure the job gets started. Sometimes Jenkins has a few seconds pause
         sleep 10
-        BUILDJSON=$(curl -s -X GET --insecure -u "$userName:$password"   "$QUEUEURL/api/json?pretty=true")
+        BUILDJSON=$(curl --insecure -s -X GET -u "$userName:$password"   "$QUEUEURL/api/json?pretty=true")
 
         if [[ $verbose == true ]]; then
           echo "BUILDJSON:"
@@ -142,7 +136,7 @@ runs:
         sleep 2
         echo "Query Build Job Status"
         echo "--------------------------------------"
-        JOBSTATUSJSON=$(curl -s -X GET -u "$userName:$password"   "$BUILDURL/api/json?pretty=true")
+        JOBSTATUSJSON=$(curl --insecure -s -X GET -u "$userName:$password"   "$BUILDURL/api/json?pretty=true")
         if [[ $verbose == true ]]; then
           echo "JOBSTATUSJSON:"
           echo "--------------------------------------"
@@ -181,7 +175,7 @@ runs:
             #Get the status
             echo "Query Build Job Status"
             echo "--------------------------------------"
-            JOBSTATUSJSON=$(curl -s -X GET -u "$userName:$password"   "$BUILDURL/api/json?pretty=true")
+            JOBSTATUSJSON=$(curl --insecure -s -X GET -u "$userName:$password"   "$BUILDURL/api/json?pretty=true")
             regex="\"building\"\s*:\s*([a-z]+).*?\"result\"\s*:\s*\"?([a-zA-Z]+)\"?."
             if [[ $JOBSTATUSJSON =~ $regex ]]; then
               if [[ $verbose == true ]]; then
